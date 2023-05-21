@@ -1,7 +1,14 @@
 import React from "react";
 import { Button, Col, Row } from "reactstrap";
 
-const Hesaplama = ({ ekSecim, counter, price, malzemeSayısı, disabled }) => {
+const Hesaplama = ({
+  ekSecim,
+  counter,
+  price,
+  malzemeSayısı,
+  disabled,
+  siparisGonder,
+}) => {
   const ekTutar = ekSecim * malzemeSayısı * counter;
   const toplamTutar = price * counter;
 
@@ -18,11 +25,10 @@ const Hesaplama = ({ ekSecim, counter, price, malzemeSayısı, disabled }) => {
         <Col>Toplam</Col>
         <Col>{toplamTutar}</Col>
       </Row>
-      <Row>
-        <Button disabled={disabled} color="warning">
-          Sipariş Ver
-        </Button>
-      </Row>
+
+      <Button disabled={disabled} color="warning">
+        Sipariş Ver
+      </Button>
     </Row>
   );
 };

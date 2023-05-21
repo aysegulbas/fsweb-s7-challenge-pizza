@@ -1,0 +1,26 @@
+.logo {
+  margin: 50px auto;
+  width: 30%;
+  height: 10%;
+}
+.home-container {
+  background-color: #ce2829;
+  color: #faf7f2;
+  width: 100%;
+  height: 80vh;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 150px;
+}
+
+.home-container p {
+  margin: 5px;
+  font-size: 50px;
+  margin: auto;
+}
+.navbar {
+  justify-content: center;
+  background-color: #ce2829;
+}

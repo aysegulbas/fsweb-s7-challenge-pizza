@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./MiddlePage.css";
 import * as yup from "yup";
+import axios from "axios";
 import {
   Col,
   Row,
@@ -13,6 +14,7 @@ import {
   Form,
 } from "reactstrap";
 import Hesaplama from "../Components/Hesaplama";
+import { useHistory, NavLink } from "react-router-dom";
 
 const initialValues = {
   boyut: "",
@@ -44,8 +46,6 @@ const initialErrors = {
   isim: "",
   boyut: "",
   hamur: "",
-  secenekler: [],
-  instructions: "",
 };
 
 const MiddlePage = () => {
@@ -57,10 +57,14 @@ const MiddlePage = () => {
   const [counter, setCounter] = useState(1);
   const [malzemeSayısı, setMalzemeSayısı] = useState(0);
   const ekSecim = 5;
+  const navigate = useHistory();
 
   const onSubmit = (event) => {
     event.preventDefault();
-    submit();
+    // submit();
+    axios.post("https://reqres.in/api/orders", data).then((response) => {
+      navigate.push("/order");
+    });
   };
 
   const schema = yup.object().shape({
@@ -79,20 +83,21 @@ const MiddlePage = () => {
 
   const changeHandler = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
-    yup
-      .reach(schema, e.target.name)
-      .validate(e.target.value)
-      .then((valid) => {
-        setErrors({ ...errors, [e.target.name]: "" });
-        console.log("test", errors);
-      })
-      .catch((err) => {
-        setErrors({ ...errors, [e.target.name]: err.errors[0] });
-        console.log("test", errors);
-      });
+    e.target.name !== "instructions" &&
+      yup
+        .reach(schema, e.target.name)
+        .ate(e.target.value)
+        .then(() => {
+          setErrors({ ...errors, [e.target.name]: "" });
+          console.log("test", errors);
+        })
+        .catch((err) => {
+          setErrors({ ...errors, [e.target.name]: err.errors[0] });
+          console.log("test", errors);
+        });
   };
   useEffect(() => {
-    schema.isValid(data).then((valid) => setDisabled(!valid));
+    schema.is(data).then(() => setDisabled(!));
     console.log("test", errors);
   }, [data]);
 
@@ -110,111 +115,121 @@ const MiddlePage = () => {
   return (
     <div className="main-container">
       <Form onSubmit={onSubmit}>
-        <div className="header-container">
-          <h1>HEADER</h1>
+        <div className="home-container">
+          <img className="logo" src="./logo.svg" alt="teknolojik yemekler" />
+          <Row className="justify-content-center p-1" xs="6">
+            <NavLink to="/">Anasayfa</NavLink>
+
+            <NavLink to="/pizza">Seçenekler</NavLink>
+
+            <NavLink id="order-pizza" className="links" to="/pizza">
+              Sipariş oluştur
+            </NavLink>
+          </Row>
         </div>
 
         <Row className="justify-content-center">
           <Col xs="6">
             <Row>
               <Col>
-                <h1>Absolute</h1>
-              </Col>
-            </Row>
-            <Row className="m-auto">
-              <Col xs="6">
-                <span>{data.ücret} TL</span>{" "}
-              </Col>
-              <Col>
-                <h5>{data.rate}</h5>
-              </Col>
-              <Col>
-                <h5>({data.comments})</h5>
+                <h1 className="fs-2 fw-bold pt-3 pb-3">
+                  Position Absolute Acı Pizza
+                </h1>
               </Col>
             </Row>
             <Row>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
+              <Col xs="6">
+                <span className="fs-4 fw-bold">{data.ücret} TL</span>
+              </Col>
+              <Col>
+                <span className="fs-6 float-end">{data.rate}</span>
+              </Col>
+              <Col>
+                <span className="fs-6 float-end">({data.comments})</span>
+              </Col>
+            </Row>
+            <Row>
+              <p className="pt-3">
+                Frontend Dev olarak hala position:absolute kullanıyorsan bu çok
+                acı pizza tam sana göre.Pizza, domates, peynir ve genellikle
+                çeşitli diğer malzemelerle kaplanmış, daha sonra geleneksel
+                olarak odun ateşinde bir fırında yüksek sıcaklıkta pişirilen,
+                genellikle yuvarlak, düzleştirilmiş mayalı buğday bazlı hamurdan
+                oluşanİtalyan kökenli lezzetli bir yemektir. Küçük bir pizzaya
+                bazen pizetta denir.
               </p>
             </Row>
             <Row>
-              <Col>
+              <Col className="fs-5 fw-bold p-3" xs="8">
                 <h3>Boyut Seç</h3>
               </Col>
-              <Col>
-                <h3>Hamur Seç</h3>
+              <Col className="fs-5 fw-bold p-3">
+                <h3 className="float-end">Hamur Seç</h3>
               </Col>
             </Row>
             <Row>
               <Col className="flex-column">
-                <Row>
-                  <label htmlFor="size-dropdown">
+                <Row className="mb-3">
+                  <Label htmlFor="size-dropdown">
                     <input
                       type="radio"
                       name="boyut"
                       id="size-dropdown"
                       value="Küçük"
-                      invalid={errors.name}
                       onChange={changeHandler}
-                    />{" "}
+                    />
                     Küçük
-                  </label>
+                  </Label>
 
-                  <label htmlFor="size-dropdown">
+                  <Label htmlFor="size-dropdown">
                     <input
                       type="radio"
                       name="boyut"
                       id="size-dropdown"
                       value="Orta"
-                      invalid={errors.name}
                       onChange={changeHandler}
-                    />{" "}
+                    />
                     Orta
-                  </label>
+                  </Label>
 
-                  <label htmlFor="size-dropdown">
+                  <Label htmlFor="size-dropdown">
                     <input
                       type="radio"
                       name="boyut"
                       id="size-dropdown"
                       value="Büyük"
-                      invalid={errors.name}
                       onChange={changeHandler}
-                    />{" "}
+                    />
                     Büyük
-                  </label>
+                  </Label>
                 </Row>
               </Col>
               <Col>
-                <FormGroup>
-                  <Label htmlFor="dough-dropdown"></Label>
+                <FormGroup className="float-end">
+                  <label>
+                    <select
+                      id="dough-dropdown"
+                      name="hamur"
+                      value={data.hamur}
+                      defaultValue="none"
+                      onChange={changeHandler}
+                    >
+                      <option value="none">Hamur Kalınlığı:</option>
+                      <option value="ince">ince</option>
+                      <option value="orta">orta</option>
+                      <option value="kalın">kalın</option>
+                    </select>
+                  </label>
 
-                  <Input
-                    id="dough-dropdown"
-                    name="hamur"
-                    type="select"
-                    value={data.hamur}
-                    invalid={errors.hamur}
-                    onChange={changeHandler}
-                  >
-                    <option disabled>hamur Seç</option>
-                    <option value="ince">ince</option>
-                    <option value="orta">orta</option>
-                    <option value="kalın">kalın</option>
-                  </Input>
                   {errors.hamur && <div>{errors.hamur}</div>}
                 </FormGroup>
               </Col>
             </Row>
-            <br></br>
+
             <Row>
-              <h3>Ek Malzemeler</h3>
+              <Col className="fs-5 fw-bold p-3" xs="6">
+                <h3>Ek Malzemeler</h3>
+              </Col>
             </Row>
             <Row>
               <p>En Fazla 10 malzeme seçebilirsiniz. 5tl</p>
@@ -242,7 +257,7 @@ const MiddlePage = () => {
                   );
                 })}
               </Col>
-              <Col>
+              <Col className="float-end">
                 {secenekler.slice(10, 14).map((e, index) => {
                   return (
                     <div key={index}>
@@ -256,18 +271,36 @@ const MiddlePage = () => {
             </Row>
 
             <Row>
-              <FormGroup>
-                <Label for="Name">İsim Bilgileri</Label>
+              <FormGroup className="fs-5 fw-bold pt-5">
+                <Label className="" htmlFor="isim">
+                  <h3>İsim Bilgileri</h3>
+                </Label>
 
-                <Input id="Name" name="isim" type="text" />
+                <Input
+                  id="Name"
+                  name="isim"
+                  type="text"
+                  value={data.isim}
+                  onChange={changeHandler}
+                />
                 {errors.isim && <div>{errors.isim}</div>}
               </FormGroup>
-              <FormGroup>
-                <Label for="instruction">Sipariş Notu</Label>
+              <FormGroup className="fs-5 fw-bold pt-3">
+                <Label for="instructions">
+                  <h3>Sipariş Notu</h3>
+                </Label>
 
-                <Input id="instruction" name="text" type="textarea" />
+                <Input
+                  id="instructions"
+                  name="instructions"
+                  type="textarea"
+                  value={data.instructions}
+                  onChange={changeHandler}
+                />
                 <hr />
               </FormGroup>
+            </Row>
+            <Row>
               <Col xs="4">
                 <ButtonToolbar>
                   <ButtonGroup>
@@ -279,8 +312,8 @@ const MiddlePage = () => {
                       }}
                     >
                       -
-                    </Button>{" "}
-                    <Input id="count" type="number" value={counter} />{" "}
+                    </Button>
+                    {counter}
                     <Button
                       color="warning"
                       onClick={() => setCounter(counter + 1)}
